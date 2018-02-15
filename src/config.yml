@@ -1,0 +1,41 @@
+# Message to send players with no permission. (Standard is default Minecraft unknown command)
+noPermMsg: '&fUnknow command. Type "/help" for help'
+
+# Max file size in bytes. If the file is bigger it can't be affected in no way.
+maxSize: 100
+
+# Words or sentences the config CAN'T contain. If they contain anything listed below, it won't be affected
+# NB: Is case sensitive
+cantContain:
+  - 'homes'
+  - 'ipAddress'
+  - 'lastAccountName'
+  - 'timestamps'
+  - 'money'
+
+# When should the plugin effect files
+# start: When the server starts
+# command: When admins run a command to manually do it (The command will always work, no matter the selection below)
+# stop: When the server shuts down.
+when: 'command'
+
+# If you have set "when" to start, you can specify how many seconds delay from when
+# the plugin is enabled, to it starts purging the files here
+delay: 10
+
+# Number of days that must have been passed since the file last was modified
+lastModified: 30
+
+# Compare files to usermap.csv - If usermap.csv contains filename, it won't be deleted
+compareUsermap: true
+
+# What should happen to the affected files
+# move: The folders are moved to "EssUserDataCleaner/backup/" and zipped. (Default)
+# delete: The files are permanently deleted, and can't be recovered (DANGEROUS)
+todo: 'move'
+
+# Log to the console every file moved/deleted
+inform: true
+
+# Only accept commands from console
+consoleOnly: false

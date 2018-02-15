@@ -1,0 +1,14 @@
+name: EssUserDataCleaner
+version: 1.0.0
+author: Arkobat
+main: com.gmail.arkobat.EssUserDataCleaner.Main
+description: Lets you clean up essentials userdata files
+softdepend: [Essentials]
+commands:
+  essclean:
+    usage: /essclean purge
+    description: Main command
+
+permissions:
+   EssUserDataCleaner.use:
+     description: permission to use the plugin
