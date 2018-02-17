@@ -47,15 +47,20 @@ public class FileHandler {
         new BukkitRunnable() {
             @Override
             public void run() {
-        File folder = new File("plugins\\Essentials\\userdata");
-        File[] listOfFiles = folder.listFiles();
-        usermap = new File("plugins\\Essentials\\usermap.csv");
-        makeFolder();
+                debug("Starting a purge");
+                File folder = new File(main.getDataFolder() + File.separator + ".."  + File.separator + "Essentials" + File.separator + "userdata");
+                debug("Userdata folder path = " + main.getDataFolder() + File.separator + ".." + File.separator + "Essentials" + File.separator + "userdata");
+                File[] listOfFiles = folder.listFiles();
+                usermap = new File(main.getDataFolder() + File.separator + ".."  + File.separator + "Essentials" + File.separator + "usermap.csv");
+                debug("Defined files");
+                makeFolder();
                 int checkedFiles = 0;
                 int shouldDelete = 0;
                 int deletedFiles = 0;
                 if (listOfFiles != null) {
                     if (listOfFiles.length >= 1) {
+                        debug("Found " + listOfFiles.length + " files to handle");
+                        debug("Starting to run files");
                         for (File file : listOfFiles) {
                             checkedFiles++;
                             if (checkFile(file)) {
@@ -67,12 +72,18 @@ public class FileHandler {
 
                         }
                     }
-                }
+                } else { debug("List of files == null"); }
                 Bukkit.getServer().getConsoleSender().sendMessage("Checked files: " + checkedFiles);
                 Bukkit.getServer().getConsoleSender().sendMessage("Files sent to deletion: " + shouldDelete);
                 Bukkit.getServer().getConsoleSender().sendMessage("Files successfully deleted: " + deletedFiles);
             }
         }.runTaskAsynchronously(this.main);
+    }
+
+    private void debug(String message) {
+        if (main.debug) {
+            Bukkit.getServer().getConsoleSender().sendMessage("§aEssClean DEBUG: §r" + message);
+        }
     }
 
     private boolean checkFile(File file) {
@@ -105,6 +116,7 @@ public class FileHandler {
                 lineChecked = true;
                 String line = scanner.nextLine();
                 if (cantContain.contains(line)) {
+                    debug("Files contains illegal lines");
                     return false;
                 }
             }
@@ -143,6 +155,7 @@ public class FileHandler {
                    lineChecked = true;
                    String line = scanner.nextLine();
                    if (line.contains(uuid)) {
+                       debug("usermap contains UUID");
                        return false;
                    }
                }
@@ -206,7 +219,7 @@ public class FileHandler {
 
     private boolean moveFile(File file) {
         try {
-            if (file.renameTo(new File(main.getDataFolder() + File.separator + "userdata\\" + file.getName()))) {
+            if (file.renameTo(new File(main.getDataFolder() + File.separator + "userdata" + File.separator + file.getName()))) {
                 if (main.inform) {
                     Bukkit.getServer().getConsoleSender().sendMessage("Moved essential userdata file " + file.getName());
                     return true;

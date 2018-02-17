@@ -1,5 +1,17 @@
+# Commands:
+# /essclean purge   - Starts to purge all userdata files (move or delete, depends on settings)
+# /essclean confirm - Confirms your purge request, and actually starts.
+# /essclean cancel  - Cancels your purge request, and the purge wont start!!
+# /essclean debug   - Enables/disable debug messages to the console
+# /essclean reload  - Reloads the config.yml, and applies changes.
+
+# Permissions:
+# EssUserDataCleaner.use  - Allow user to use the plugin.
+
+
 # Message to send players with no permission. (Standard is default Minecraft unknown command)
-noPermMsg: '&fUnknow command. Type "/help" for help'
+# To use color codes, use § and not &. (Example: "§eMessage" instead of "&eMessage")
+noPermMsg: '§fUnknown command. Type "/help" for help'
 
 # Max file size in bytes. If the file is bigger it can't be affected in no way.
 maxSize: 100

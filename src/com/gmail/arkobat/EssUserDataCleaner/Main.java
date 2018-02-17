@@ -21,6 +21,7 @@ public class Main extends JavaPlugin{
     public boolean inform;
     public long lastModified;
     public boolean consoleOnly;
+    public boolean debug = false;
 
 
     FileHandler fileHandler = new FileHandler(this);
@@ -49,7 +50,7 @@ public class Main extends JavaPlugin{
     }
 
 
-    private boolean loadDefaultConfig() {
+    public boolean loadDefaultConfig() {
         noPermMsg = getConfig().getString("noPermMsg");
         maxSize = getConfig().getInt("maxSize");
         cantContain = getConfig().getStringList("cantContain");
@@ -61,6 +62,7 @@ public class Main extends JavaPlugin{
         inform = getConfig().getBoolean("inform");
         lastModified = getConfig().getInt("lastModified");
         consoleOnly = getConfig().getBoolean("consoleOnly");
+        debug = false;
         return true;
     }
 
