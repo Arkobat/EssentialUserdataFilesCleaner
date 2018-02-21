@@ -8,8 +8,6 @@ import java.util.List;
 
 public class Main extends JavaPlugin{
 
-
-
     public String noPermMsg;
     public List<String> cantContain;
     public List<String> mustContain;
@@ -23,11 +21,7 @@ public class Main extends JavaPlugin{
     public boolean consoleOnly;
     public boolean debug = false;
 
-
     FileHandler fileHandler = new FileHandler(this);
-
-
-
 
     @Override
     public void onEnable() {
@@ -41,14 +35,11 @@ public class Main extends JavaPlugin{
         fileHandler.source("start");
     }
 
-
-
     @Override
     public void onDisable() {
         fileHandler.source("stop");
         Bukkit.getServer().getLogger().info("EssUserDataCleaner Disabled");
     }
-
 
     public boolean loadDefaultConfig() {
         noPermMsg = getConfig().getString("noPermMsg");

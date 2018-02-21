@@ -5,11 +5,11 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.*;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class FileHandler {
-
 
     private final Main main;
 
@@ -19,6 +19,7 @@ public class FileHandler {
 
     private Boolean stop = false;
     private File usermap;
+    private List<String> usermapList = new ArrayList<>();
 
     public void source(String source) {
         switch (source) {
@@ -48,12 +49,13 @@ public class FileHandler {
             @Override
             public void run() {
                 debug("Starting a purge");
-                File folder = new File(main.getDataFolder() + File.separator + ".."  + File.separator + "Essentials" + File.separator + "userdata");
+                File folder = new File(main.getDataFolder() + File.separator + ".." + File.separator + "Essentials" + File.separator + "userdata");
                 debug("Userdata folder path = " + main.getDataFolder() + File.separator + ".." + File.separator + "Essentials" + File.separator + "userdata");
                 File[] listOfFiles = folder.listFiles();
-                usermap = new File(main.getDataFolder() + File.separator + ".."  + File.separator + "Essentials" + File.separator + "usermap.csv");
+                usermap = new File(main.getDataFolder() + File.separator + ".." + File.separator + "Essentials" + File.separator + "usermap.csv");
                 debug("Defined files");
                 makeFolder();
+                loadUsermap(usermap);
                 int checkedFiles = 0;
                 int shouldDelete = 0;
                 int deletedFiles = 0;
@@ -72,7 +74,9 @@ public class FileHandler {
 
                         }
                     }
-                } else { debug("List of files == null"); }
+                } else {
+                    debug("List of files == null");
+                }
                 Bukkit.getServer().getConsoleSender().sendMessage("Checked files: " + checkedFiles);
                 Bukkit.getServer().getConsoleSender().sendMessage("Files sent to deletion: " + shouldDelete);
                 Bukkit.getServer().getConsoleSender().sendMessage("Files successfully deleted: " + deletedFiles);
@@ -89,14 +93,13 @@ public class FileHandler {
     private boolean checkFile(File file) {
         if (compareSize(file)) {
             if (lastModified(file)) {
-                if (cantContain(file)) {
-                    if (checkUsermap(file)) {
+                if (checkUsermap(file)) {
+                    if (cantContain(file)) {
+                        return true;
+                    } else if (isFileEmpty(file)) {
                         return true;
                     }
-                } else if (isFileEmpty (file)) {
-                    if (checkUsermap(file)) {
-                        return true;
-                    }
+
                 }
             }
         }
@@ -104,10 +107,19 @@ public class FileHandler {
     }
 
     private boolean compareSize(File file) {
-        return (file.length() <= main.maxSize);
+        if (main.maxSize == -1) {
+            return false;
+        } else {
+            return (file.length() <= main.maxSize);
+        }
     }
 
     private boolean cantContain(File file) {
+        if (main.cantContain.size() == 1) {
+            if (main.cantContain.get(0).equalsIgnoreCase("disabled")) {
+                return false;
+            }
+        }
         try {
             Boolean lineChecked = false;
             Scanner scanner = new Scanner(file);
@@ -145,31 +157,28 @@ public class FileHandler {
         return false;
     }
 
+    private void loadUsermap(File file) {
+        if (main.compareUsermap) {
+           usermapList.clear();
+            debug("Starting to scan usermap.cvs");
+            try {
+                Scanner scanner = new Scanner(file);
+                while (scanner.hasNextLine()) {
+                    String line = scanner.nextLine();
+                    usermapList.add(line);
+                }
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private boolean checkUsermap(File file) {
-       if (main.compareUsermap) {
-           try {
-               Boolean lineChecked = false;
-               Scanner scanner = new Scanner(usermap);
-               String uuid = getFileName(file);
-               while (scanner.hasNextLine()) {
-                   lineChecked = true;
-                   String line = scanner.nextLine();
-                   if (line.contains(uuid)) {
-                       debug("usermap contains UUID");
-                       return false;
-                   }
-               }
-               scanner.close();
-               if (lineChecked) {
-                   return true;
-               }
-           } catch (FileNotFoundException ignored) {
-               return false;
-           }
-           return false;
-       } else {
-           return true;
-       }
+        if (main.compareUsermap) {
+            return !usermapList.contains(getFileName(file));
+        } else {
+            return true;
+        }
     }
 
     private String getFileName(File file) {
@@ -183,6 +192,9 @@ public class FileHandler {
     }
 
     private boolean lastModified(File file) {
+        if (main.lastModified == -1) {
+            return false;
+        }
         long daysSince = (Instant.now().getEpochSecond() * 1000 - file.lastModified()) / 24 / 60 / 1000;
         return (daysSince > main.lastModified);
     }
@@ -194,7 +206,7 @@ public class FileHandler {
             case "delete":
                 return deleteFile(file);
             default:
-                Bukkit.getServer().getConsoleSender().sendMessage("Error in settings. Check 'todo'");
+                Bukkit.getServer().getConsoleSender().sendMessage("§aEssClean: §cError in settings. Check 'todo'");
                 return false;
         }
     }

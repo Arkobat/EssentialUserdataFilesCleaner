@@ -44,7 +44,6 @@ public class CommandHandler implements CommandExecutor {
         return true;
     }
 
-
     private boolean preChecks (CommandSender sender) {
         Player p = sender instanceof Player ? (Player) sender: null;
         boolean enterSwitch = false;

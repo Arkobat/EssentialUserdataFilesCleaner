@@ -14,10 +14,12 @@
 noPermMsg: '§fUnknown command. Type "/help" for help'
 
 # Max file size in bytes. If the file is bigger it can't be affected in no way.
+# To disable, set to -1
 maxSize: 100
 
 # Words or sentences the config CAN'T contain. If they contain anything listed below, it won't be affected
 # NB: Is case sensitive
+# To 'disable', add ’disabled’ as the only entry
 cantContain:
   - 'homes'
   - 'ipAddress'
@@ -36,9 +38,11 @@ when: 'command'
 delay: 10
 
 # Number of days that must have been passed since the file last was modified
+# To disable, set to -1
 lastModified: 30
 
 # Compare files to usermap.csv - If usermap.csv contains filename, it won't be deleted
+# To disable, set to false
 compareUsermap: true
 
 # What should happen to the affected files
