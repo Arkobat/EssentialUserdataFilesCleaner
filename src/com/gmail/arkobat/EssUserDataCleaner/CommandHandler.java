@@ -67,7 +67,7 @@ public class CommandHandler implements CommandExecutor {
             if (!confirming.contains(p)) {
                 p.sendMessage("§cAre you sure you want to move/delete invalid userdata files.");
                 p.sendMessage("§cBe sure you know what to are doing.");
-                p.sendMessage("§cTo contuine, type '§b/esscealn confirm§c' within 30 seconds");
+                p.sendMessage("§cTo continue, type '§b/essclean confirm§c' within 30 seconds");
                 p.sendMessage("§cTo cancel please type '§b/essclean cancel§c'");
                 addList(p);
             } else {
