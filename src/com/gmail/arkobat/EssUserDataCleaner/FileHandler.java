@@ -193,7 +193,7 @@ public class FileHandler {
 
     private boolean lastModified(File file) {
         if (main.lastModified == -1) {
-            return false;
+            return true;
         }
         long daysSince = (Instant.now().getEpochSecond() * 1000 - file.lastModified()) / 24 / 60 / 1000;
         return (daysSince > main.lastModified);
