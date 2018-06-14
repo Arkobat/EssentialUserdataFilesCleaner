@@ -6,6 +6,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import java.io.*;
 import java.time.Instant;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -123,12 +124,13 @@ public class FileHandler {
         try {
             Boolean lineChecked = false;
             Scanner scanner = new Scanner(file);
-            List<String> cantContain = main.cantContain;
+            CharSequence[] cs = main.cantContain.toArray(new CharSequence[main.cantContain.size()]);
             while (scanner.hasNextLine()) {
                 lineChecked = true;
                 String line = scanner.nextLine();
-                if (cantContain.contains(line)) {
+                if (Arrays.stream(cs).anyMatch(line::contains)) {
                     debug("Files contains illegal lines");
+                	scanner.close();
                     return false;
                 }
             }
@@ -193,7 +195,7 @@ public class FileHandler {
 
     private boolean lastModified(File file) {
         if (main.lastModified == -1) {
-            return false;
+            return true;
         }
         long daysSince = (Instant.now().getEpochSecond() * 1000 - file.lastModified()) / 24 / 60 / 1000;
         return (daysSince > main.lastModified);
