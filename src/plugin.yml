@@ -1,5 +1,5 @@
 name: EssUserDataCleaner
-version: 1.0.0
+version: 1.0.1
 author: Arkobat
 main: com.gmail.arkobat.EssUserDataCleaner.Main
 description: Lets you clean up essentials userdata files
